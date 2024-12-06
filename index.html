@@ -24,6 +24,7 @@
             max-width: 400px;
             width: 100%;
             margin: 0 auto;
+            text-align: center; /* Ensures all content inside is centered */
         }
         label {
             font-weight: 500;
@@ -31,13 +32,16 @@
             display: block;
         }
         select {
-            width: 100%;
+            width: 80%; /* Reduced width for better centering */
             padding: 12px;
             margin-bottom: 16px;
             border: 1px solid #d1d1d6;
             border-radius: 12px;
             background-color: #f5f5f7;
             font-size: 16px;
+            margin-left: auto;
+            margin-right: auto;
+            display: block;
         }
         select:focus {
             border-color: #007aff;
@@ -48,10 +52,13 @@
             padding: 16px;
             background-color: #f5f5f7;
             border-radius: 12px;
-            display: none;
+            text-align: left;
         }
         #detailsPanel p {
             margin: 8px 0;
+        }
+        input[type="hidden"] {
+            display: none;
         }
     </style>
 </head>
@@ -67,11 +74,15 @@
             <option value="">Select a course...</option>
         </select>
 
-        <div id="detailsPanel">
+        <div id="detailsPanel" style="display: none;">
             <h3>Course Details</h3>
             <p id="fee"></p>
             <p id="campus"></p>
         </div>
+
+        <!-- Hidden fields to capture selected values -->
+        <input type="hidden" id="hiddenUniversity" name="universitySelection">
+        <input type="hidden" id="hiddenCourse" name="courseSelection">
     </div>
 
     <script type="text/javascript">
@@ -120,6 +131,7 @@
                 });
             }
             document.getElementById('detailsPanel').style.display = 'none';
+            updateHiddenFields();
         }
 
         // Update Course Details Panel
@@ -135,6 +147,15 @@
             } else {
                 detailsPanel.style.display = 'none';
             }
+            updateHiddenFields();
+        }
+
+        // Update hidden fields with selected values
+        function updateHiddenFields() {
+            var selectedUniversity = document.getElementById('universityDropdown').value;
+            var selectedCourse = document.getElementById('courseDropdown').value;
+            document.getElementById('hiddenUniversity').value = selectedUniversity;
+            document.getElementById('hiddenCourse').value = selectedCourse;
         }
 
         // Initialize dropdowns
