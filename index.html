@@ -1,86 +1,71 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<!DOCTYPE html>
 <html>
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta http-equiv="Content-Style-Type" content="text/css">
-  <title></title>
-  <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="2575.2">
-  <style type="text/css">
-    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
-    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
-  </style>
+    <meta charset="UTF-8">
+    <title>Studywest Widget</title>
+    <script src="//js.jotform.com/JotFormCustomWidget.min.js"></script>
 </head>
 <body>
-<p class="p1">&lt;!DOCTYPE html&gt;</p>
-<p class="p1">&lt;html&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;head&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;script src="//js.jotform.com/JotFormCustomWidget.min.js"&gt;&lt;/script&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/head&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;body&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div id="main"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;label for="universityDropdown"&gt;选择大学:&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;select id="universityDropdown"&gt;&lt;/select&gt;</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;label for="courseDropdown"&gt;选择课程:&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;select id="courseDropdown"&gt;&lt;/select&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;script type="text/javascript"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>// 这里是用来初始化下拉框和获取数据的逻辑</p>
-<p class="p1"><span class="Apple-converted-space">            </span>var universities = {};</p>
-<p class="p1"><span class="Apple-converted-space">            </span>// 可以从 Google Sheets 或其他数据源获取数据</p>
-<p class="p1"><span class="Apple-converted-space">            </span>async function fetchData() {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>// 示例 API 调用来获取数据</p>
-<p class="p1"><span class="Apple-converted-space">                </span>// 替换为你自己的 API 端点 URL</p>
-<p class="p1"><span class="Apple-converted-space">                </span>const response = await fetch('YOUR_DATA_SOURCE_URL');</p>
-<p class="p1"><span class="Apple-converted-space">                </span>const data = await response.json();</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">                </span>// 用于填充大学和课程数据</p>
-<p class="p1"><span class="Apple-converted-space">                </span>data.forEach(row =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>const university = row.university;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>const course = row.course;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>if (!universities[university]) {</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>universities[university] = [];</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>}</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>universities[university].push(course);</p>
-<p class="p1"><span class="Apple-converted-space">                </span>});</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">                </span>updateUniversityDropdown();</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>function updateUniversityDropdown() {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>var universityDropdown = document.getElementById('universityDropdown');</p>
-<p class="p1"><span class="Apple-converted-space">                </span>universityDropdown.innerHTML = '&lt;option value=""&gt;请选择大学&lt;/option&gt;';</p>
-<p class="p1"><span class="Apple-converted-space">                </span>Object.keys(universities).forEach(function(university) {</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>var option = document.createElement('option');</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>option.value = university;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>option.text = university;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>universityDropdown.appendChild(option);</p>
-<p class="p1"><span class="Apple-converted-space">                </span>});</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>function updateCourseDropdown() {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>var courseDropdown = document.getElementById('courseDropdown');</p>
-<p class="p1"><span class="Apple-converted-space">                </span>var selectedUniversity = document.getElementById('universityDropdown').value;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>courseDropdown.innerHTML = '&lt;option value=""&gt;请选择课程&lt;/option&gt;';</p>
-<p class="p1"><span class="Apple-converted-space">                </span>if (universities[selectedUniversity]) {</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>universities[selectedUniversity].forEach(function(course) {</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>var option = document.createElement('option');</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>option.value = course;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>option.text = course;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>courseDropdown.appendChild(option);</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>});</p>
-<p class="p1"><span class="Apple-converted-space">                </span>}</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>// 初始化页面时加载数据</p>
-<p class="p1"><span class="Apple-converted-space">            </span>JFCustomWidget.subscribe("ready", function(){</p>
-<p class="p1"><span class="Apple-converted-space">                </span>fetchData();</p>
-<p class="p1"><span class="Apple-converted-space">                </span>document.getElementById('universityDropdown').addEventListener('change', updateCourseDropdown);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>});</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/script&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/body&gt;</p>
-<p class="p1">&lt;/html&gt;</p>
+    <div id="main">
+        <label for="universityDropdown">选择大学:</label>
+        <select id="universityDropdown"></select>
+        
+        <label for="courseDropdown">选择课程:</label>
+        <select id="courseDropdown"></select>
+    </div>
+
+    <script type="text/javascript">
+        // 初始化下拉框数据
+        var universities = {};
+
+        // 从外部数据源抓取数据
+        async function fetchData() {
+            // 请替换为你自己的数据源 URL
+            const response = await fetch('YOUR_DATA_SOURCE_URL');
+            const data = await response.json();
+
+            data.forEach(row => {
+                const university = row.university;
+                const course = row.course;
+                if (!universities[university]) {
+                    universities[university] = [];
+                }
+                universities[university].push(course);
+            });
+
+            updateUniversityDropdown();
+        }
+
+        function updateUniversityDropdown() {
+            var universityDropdown = document.getElementById('universityDropdown');
+            universityDropdown.innerHTML = '<option value="">请选择大学</option>';
+            Object.keys(universities).forEach(function(university) {
+                var option = document.createElement('option');
+                option.value = university;
+                option.text = university;
+                universityDropdown.appendChild(option);
+            });
+        }
+
+        function updateCourseDropdown() {
+            var courseDropdown = document.getElementById('courseDropdown');
+            var selectedUniversity = document.getElementById('universityDropdown').value;
+            courseDropdown.innerHTML = '<option value="">请选择课程</option>';
+            if (universities[selectedUniversity]) {
+                universities[selectedUniversity].forEach(function(course) {
+                    var option = document.createElement('option');
+                    option.value = course;
+                    option.text = course;
+                    courseDropdown.appendChild(option);
+                });
+            }
+        }
+
+        // 初始化时加载数据
+        JFCustomWidget.subscribe("ready", function() {
+            fetchData();
+            document.getElementById('universityDropdown').addEventListener('change', updateCourseDropdown);
+        });
+    </script>
 </body>
 </html>
