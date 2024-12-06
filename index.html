@@ -2,44 +2,75 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Studywest Widget</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Studywest Course Selector</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap">
     <script src="//js.jotform.com/JotFormCustomWidget.min.js"></script>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f5f5f7;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        #main {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+        }
+        label {
+            font-weight: 500;
+            margin-bottom: 8px;
+            display: block;
+        }
+        select {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 16px;
+            border: 1px solid #d1d1d6;
+            border-radius: 12px;
+            background-color: #f5f5f7;
+            font-size: 16px;
+        }
+        select:focus {
+            border-color: #007aff;
+            outline: none;
+        }
+    </style>
 </head>
 <body>
     <div id="main">
-        <label for="universityDropdown">选择大学:</label>
-        <select id="universityDropdown"></select>
-        
-        <label for="courseDropdown">选择课程:</label>
-        <select id="courseDropdown"></select>
+        <label for="universityDropdown">Select University:</label>
+        <select id="universityDropdown">
+            <option value="">Select a university...</option>
+        </select>
+
+        <label for="courseDropdown">Select Course:</label>
+        <select id="courseDropdown">
+            <option value="">Select a course...</option>
+        </select>
     </div>
 
     <script type="text/javascript">
-        // 初始化下拉框数据
-        var universities = {};
+        // Pseudo-data for testing
+        var universities = {
+            "University of Western Australia": ["Computer Science", "Data Science", "Economics"],
+            "Curtin University": ["Mechanical Engineering", "Civil Engineering", "Business Administration"],
+            "Murdoch University": ["Environmental Science", "Veterinary Medicine", "Psychology"]
+        };
 
-        // 从外部数据源抓取数据
-        async function fetchData() {
-            // 请替换为你自己的数据源 URL
-            const response = await fetch('YOUR_DATA_SOURCE_URL');
-            const data = await response.json();
-
-            data.forEach(row => {
-                const university = row.university;
-                const course = row.course;
-                if (!universities[university]) {
-                    universities[university] = [];
-                }
-                universities[university].push(course);
-            });
-
-            updateUniversityDropdown();
-        }
-
+        // Update University Dropdown
         function updateUniversityDropdown() {
             var universityDropdown = document.getElementById('universityDropdown');
-            universityDropdown.innerHTML = '<option value="">请选择大学</option>';
-            Object.keys(universities).forEach(function(university) {
+            universityDropdown.innerHTML = '<option value="">Select a university...</option>';
+            Object.keys(universities).forEach(function (university) {
                 var option = document.createElement('option');
                 option.value = university;
                 option.text = university;
@@ -47,12 +78,13 @@
             });
         }
 
+        // Update Course Dropdown
         function updateCourseDropdown() {
             var courseDropdown = document.getElementById('courseDropdown');
             var selectedUniversity = document.getElementById('universityDropdown').value;
-            courseDropdown.innerHTML = '<option value="">请选择课程</option>';
+            courseDropdown.innerHTML = '<option value="">Select a course...</option>';
             if (universities[selectedUniversity]) {
-                universities[selectedUniversity].forEach(function(course) {
+                universities[selectedUniversity].forEach(function (course) {
                     var option = document.createElement('option');
                     option.value = course;
                     option.text = course;
@@ -61,9 +93,9 @@
             }
         }
 
-        // 初始化时加载数据
-        JFCustomWidget.subscribe("ready", function() {
-            fetchData();
+        // Initialize dropdowns
+        document.addEventListener('DOMContentLoaded', function () {
+            updateUniversityDropdown();
             document.getElementById('universityDropdown').addEventListener('change', updateCourseDropdown);
         });
     </script>
