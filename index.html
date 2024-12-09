@@ -63,7 +63,7 @@
 </head>
 <body>
     <div id="main">
-        <small>Version: 1.1.4</small>
+        <small>Version: 1.1.1</small>
         <label for="universityDropdown">Select University:</label>
         <select id="universityDropdown">
             <option value="">Select a university...</option>
@@ -81,9 +81,9 @@
         </div>
 
         <!-- Hidden fields to capture selected values -->
-        <input type="hidden" id="hiddenUniversity" name="q771_hiddenuniversity">
-        <input type="hidden" id="hiddenCourse" name="q772_hiddencourse">
-        <input type="hidden" id="combine" name="q787_combine">
+        <input type="hidden" id="input_771" name="q771_hiddenuniversity">
+        <input type="hidden" id="input_772" name="q772_hiddencourse">
+        <input type="hidden" id="input_787" name="q787_combine">
     </div>
 
     <script type="text/javascript">
@@ -158,27 +158,27 @@
             var combinedValue = selectedUniversity + ' - ' + selectedCourse;
 
             console.log("Updating hidden fields", {
-                q771_hiddenuniversity: selectedUniversity,
-                q772_hiddencourse: selectedCourse,
-                q787_combine: combinedValue
+                input_771: selectedUniversity,
+                input_772: selectedCourse,
+                input_787: combinedValue
             });
 
-            document.getElementById('hiddenUniversity').value = selectedUniversity;
-            document.getElementById('hiddenCourse').value = selectedCourse;
-            document.getElementById('combine').value = combinedValue;
+            document.getElementById('input_771').value = selectedUniversity;
+            document.getElementById('input_772').value = selectedCourse;
+            document.getElementById('input_787').value = combinedValue;
 
             try {
                 console.log("Sending data via postMessage");
                 window.parent.postMessage({
-                    q771_hiddenuniversity: selectedUniversity,
-                    q772_hiddencourse: selectedCourse,
-                    q787_combine: combinedValue
+                    input_771: selectedUniversity,
+                    input_772: selectedCourse,
+                    input_787: combinedValue
                 }, '*');
 
                 // Update visible hidden input values to ensure compatibility with JotForm's expectations
-                document.querySelector('[name="q771_hiddenuniversity"]').value = selectedUniversity;
-                document.querySelector('[name="q772_hiddencourse"]').value = selectedCourse;
-                document.querySelector('[name="q787_combine"]').value = combinedValue;
+                document.querySelector('[id="input_771"]').value = selectedUniversity;
+                document.querySelector('[id="input_772"]').value = selectedCourse;
+                document.querySelector('[id="input_787"]').value = combinedValue;
 
             } catch (error) {
                 console.error("Error sending message to parent window:", error.message);
