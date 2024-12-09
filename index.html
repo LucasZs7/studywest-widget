@@ -83,7 +83,7 @@
         <!-- Hidden fields to capture selected values -->
         <input type="hidden" id="hiddenUniversity" name="q_hiddenuniversity">
         <input type="hidden" id="hiddenCourse" name="q_hiddencourse">
-        <input type="hidden" id="combine" name="q787_combine">
+        <input type="hidden" id="combine" name="input_787">
     </div>
 
     <script type="text/javascript">
@@ -160,7 +160,7 @@
             console.log("Updating hidden fields", {
                 q_hiddenuniversity: selectedUniversity,
                 q_hiddencourse: selectedCourse,
-                q787_combine: combinedValue
+                input_787: combinedValue
             });
 
             document.getElementById('hiddenUniversity').value = selectedUniversity;
@@ -172,13 +172,13 @@
                 window.parent.postMessage({
                     q_hiddenuniversity: selectedUniversity,
                     q_hiddencourse: selectedCourse,
-                    q787_combine: combinedValue
+                    input_787: combinedValue
                 }, '*');
 
                 // Update visible hidden input values to ensure compatibility with JotForm's expectations
                 document.querySelector('[name="q_hiddenuniversity"]').value = selectedUniversity;
                 document.querySelector('[name="q_hiddencourse"]').value = selectedCourse;
-                document.querySelector('[name="q787_combine"]').value = combinedValue;
+                document.querySelector('[name="input_787"]').value = combinedValue;
 
             } catch (error) {
                 console.error("Error sending message to parent window:", error.message);
