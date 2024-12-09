@@ -63,7 +63,7 @@
 </head>
 <body>
     <div id="main">
-        <small>Version: 1.1.1</small>
+        <small>Version: 1.1.2</small>
         <label for="universityDropdown">Select University:</label>
         <select id="universityDropdown">
             <option value="">Select a university...</option>
@@ -83,6 +83,7 @@
         <!-- Hidden fields to capture selected values -->
         <input type="hidden" id="hiddenUniversity" name="q_hiddenuniversity">
         <input type="hidden" id="hiddenCourse" name="q_hiddencourse">
+        <input type="hidden" id="combine" name="q_combine">
     </div>
 
     <script type="text/javascript">
@@ -154,25 +155,30 @@
         function updateHiddenFields() {
             var selectedUniversity = document.getElementById('universityDropdown').value;
             var selectedCourse = document.getElementById('courseDropdown').value;
+            var combinedValue = selectedUniversity + ' - ' + selectedCourse;
 
             console.log("Updating hidden fields", {
                 q_hiddenuniversity: selectedUniversity,
-                q_hiddencourse: selectedCourse
+                q_hiddencourse: selectedCourse,
+                q_combine: combinedValue
             });
 
             document.getElementById('hiddenUniversity').value = selectedUniversity;
             document.getElementById('hiddenCourse').value = selectedCourse;
+            document.getElementById('combine').value = combinedValue;
 
             try {
                 console.log("Sending data via postMessage");
                 window.parent.postMessage({
                     q_hiddenuniversity: selectedUniversity,
-                    q_hiddencourse: selectedCourse
+                    q_hiddencourse: selectedCourse,
+                    q_combine: combinedValue
                 }, '*');
 
                 // Update visible hidden input values to ensure compatibility with JotForm's expectations
                 document.querySelector('[name="q_hiddenuniversity"]').value = selectedUniversity;
                 document.querySelector('[name="q_hiddencourse"]').value = selectedCourse;
+                document.querySelector('[name="q_combine"]').value = combinedValue;
 
             } catch (error) {
                 console.error("Error sending message to parent window:", error.message);
