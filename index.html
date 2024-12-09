@@ -63,7 +63,7 @@
 </head>
 <body>
     <div id="main">
-        <small>Version: 1.1.1</small>
+        <small>Version: 0.1.1</small>
         <label for="universityDropdown">Select University:</label>
         <select id="universityDropdown">
             <option value="">Select a university...</option>
@@ -80,10 +80,8 @@
             <p id="campus"></p>
         </div>
 
-        <!-- Hidden fields to capture selected values -->
-        <input type="hidden" id="input_771" name="q771_hiddenuniversity">
-        <input type="hidden" id="input_772" name="q772_hiddencourse">
-        <input type="hidden" id="input_787" name="q787_combine">
+        <!-- Hidden field to capture selected values -->
+        <input type="hidden" id="input_793" name="database">
     </div>
 
     <script type="text/javascript">
@@ -132,7 +130,7 @@
                 });
             }
             document.getElementById('detailsPanel').style.display = 'none';
-            updateHiddenFields();
+            updateHiddenField();
         }
 
         // Update Course Details Panel
@@ -148,41 +146,20 @@
             } else {
                 detailsPanel.style.display = 'none';
             }
-            updateHiddenFields();
+            updateHiddenField();
         }
 
-        // Update hidden fields with selected values
-        function updateHiddenFields() {
+        // Update hidden field with selected values
+        function updateHiddenField() {
             var selectedUniversity = document.getElementById('universityDropdown').value;
             var selectedCourse = document.getElementById('courseDropdown').value;
             var combinedValue = selectedUniversity + ' - ' + selectedCourse;
 
-            console.log("Updating hidden fields", {
-                input_771: selectedUniversity,
-                input_772: selectedCourse,
-                input_787: combinedValue
+            console.log("Updating hidden field", {
+                input_793: combinedValue
             });
 
-            document.getElementById('input_771').value = selectedUniversity;
-            document.getElementById('input_772').value = selectedCourse;
-            document.getElementById('input_787').value = combinedValue;
-
-            try {
-                console.log("Sending data via postMessage");
-                window.parent.postMessage({
-                    input_771: selectedUniversity,
-                    input_772: selectedCourse,
-                    input_787: combinedValue
-                }, '*');
-
-                // Update visible hidden input values to ensure compatibility with JotForm's expectations
-                document.querySelector('[id="input_771"]').value = selectedUniversity;
-                document.querySelector('[id="input_772"]').value = selectedCourse;
-                document.querySelector('[id="input_787"]').value = combinedValue;
-
-            } catch (error) {
-                console.error("Error sending message to parent window:", error.message);
-            }
+            document.getElementById('input_793').value = combinedValue;
         }
 
         // Initialize dropdowns
