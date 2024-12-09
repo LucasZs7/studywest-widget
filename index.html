@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Studywest Course Selector</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap">
-    <script src="//js.jotform.com/JotFormCustomWidget.min.js" defer></script>
     <style>
         body {
             font-family: 'Roboto', sans-serif;
@@ -64,7 +63,7 @@
 </head>
 <body>
     <div id="main">
-        <small>Version: 1.0.6</small>
+        <small>Version: 1.0.7</small>
         <label for="universityDropdown">Select University:</label>
         <select id="universityDropdown">
             <option value="">Select a university...</option>
@@ -165,17 +164,13 @@
             document.getElementById('hiddenCourse').value = selectedCourse;
 
             try {
-                if (typeof JotFormCustomWidget !== 'undefined' && typeof JotFormCustomWidget.send === 'function') {
-                    console.log("Sending data to Jotform Widget API");
-                    JotFormCustomWidget.send({
-                        q_hiddenuniversity: selectedUniversity,
-                        q_hiddencourse: selectedCourse
-                    });
-                } else {
-                    throw new Error("JotFormCustomWidget is not defined or send function is missing!");
-                }
+                console.log("Sending data via postMessage");
+                window.parent.postMessage({
+                    q_hiddenuniversity: selectedUniversity,
+                    q_hiddencourse: selectedCourse
+                }, '*');
             } catch (error) {
-                console.error(error.message);
+                console.error("Error sending message to parent window:", error.message);
             }
         }
 
