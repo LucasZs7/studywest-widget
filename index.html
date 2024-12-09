@@ -4,61 +4,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Studywest Course Selector</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap">
     <script src="//js.jotform.com/JotFormCustomWidget.min.js"></script>
     <style>
         body {
-            font-family: 'Roboto', sans-serif;
-            background-color: #f5f5f7;
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
             color: #333;
+            margin: 0;
+            padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            margin: 0;
         }
         #main {
             background: #ffffff;
-            border-radius: 16px;
-            padding: 24px;
-            max-width: 400px;
-            width: 100%;
-            margin: 0 auto;
-            text-align: center; /* Ensures all content inside is centered */
-        }
-        label {
-            font-weight: 500;
-            margin-bottom: 8px;
-            display: block;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
         select {
-            width: 80%; /* Reduced width for better centering */
-            padding: 12px;
-            margin-bottom: 16px;
-            border: 1px solid #d1d1d6;
-            border-radius: 12px;
-            background-color: #f5f5f7;
+            margin: 10px 0;
+            padding: 8px;
             font-size: 16px;
-            margin-left: auto;
-            margin-right: auto;
-            display: block;
-        }
-        select:focus {
-            border-color: #007aff;
-            outline: none;
-        }
-        #detailsPanel {
-            margin-top: 16px;
-            padding: 16px;
-            background-color: #f5f5f7;
-            border-radius: 12px;
-            text-align: left;
-        }
-        #detailsPanel p {
-            margin: 8px 0;
-        }
-        input[type="hidden"] {
-            display: none;
+            width: 100%;
+            border: 1px solid #ddd;
+            border-radius: 4px;
         }
     </style>
 </head>
@@ -73,96 +44,63 @@
         <select id="courseDropdown">
             <option value="">Select a course...</option>
         </select>
-
-        <div id="detailsPanel" style="display: none;">
-            <h3>Course Details</h3>
-            <p id="fee"></p>
-            <p id="campus"></p>
-        </div>
-
-        <!-- Hidden fields to capture selected values -->
-        <input type="hidden" id="hiddenUniversity" name="q_hiddenUniversity">
-        <input type="hidden" id="hiddenCourse" name="q_hiddenCourse">
     </div>
 
-    <script type="text/javascript">
-        // Pseudo-data for testing
+    <script>
+        // 示例数据
         var universities = {
-            "University of Western Australia": {
-                "Computer Science": { "fee": "$30,000/year", "campus": "Crawley, Perth" },
-                "Data Science": { "fee": "$32,000/year", "campus": "Crawley, Perth" },
-                "Economics": { "fee": "$28,000/year", "campus": "Crawley, Perth" }
-            },
-            "Curtin University": {
-                "Mechanical Engineering": { "fee": "$29,000/year", "campus": "Bentley, Perth" },
-                "Civil Engineering": { "fee": "$30,000/year", "campus": "Bentley, Perth" },
-                "Business Administration": { "fee": "$27,000/year", "campus": "Bentley, Perth" }
-            },
-            "Murdoch University": {
-                "Environmental Science": { "fee": "$26,000/year", "campus": "Murdoch, Perth" },
-                "Veterinary Medicine": { "fee": "$35,000/year", "campus": "Murdoch, Perth" },
-                "Psychology": { "fee": "$25,000/year", "campus": "Murdoch, Perth" }
-            }
+            "University of Western Australia": ["Computer Science", "Data Science", "Economics"],
+            "Curtin University": ["Mechanical Engineering", "Civil Engineering", "Business Administration"],
+            "Murdoch University": ["Environmental Science", "Veterinary Medicine", "Psychology"]
         };
 
-        // Update University Dropdown
+        // 更新大学选项
         function updateUniversityDropdown() {
-            var universityDropdown = document.getElementById('universityDropdown');
-            universityDropdown.innerHTML = '<option value="">Select a university...</option>';
+            var universityDropdown = document.getElementById("universityDropdown");
             Object.keys(universities).forEach(function (university) {
-                var option = document.createElement('option');
+                var option = document.createElement("option");
                 option.value = university;
-                option.text = university;
+                option.textContent = university;
                 universityDropdown.appendChild(option);
             });
         }
 
-        // Update Course Dropdown
+        // 更新课程选项
         function updateCourseDropdown() {
-            var courseDropdown = document.getElementById('courseDropdown');
-            var selectedUniversity = document.getElementById('universityDropdown').value;
+            var courseDropdown = document.getElementById("courseDropdown");
+            var universityDropdown = document.getElementById("universityDropdown");
+            var selectedUniversity = universityDropdown.value;
+
             courseDropdown.innerHTML = '<option value="">Select a course...</option>';
-            if (universities[selectedUniversity]) {
-                Object.keys(universities[selectedUniversity]).forEach(function (course) {
-                    var option = document.createElement('option');
+            if (selectedUniversity && universities[selectedUniversity]) {
+                universities[selectedUniversity].forEach(function (course) {
+                    var option = document.createElement("option");
                     option.value = course;
-                    option.text = course;
+                    option.textContent = course;
                     courseDropdown.appendChild(option);
                 });
             }
-            document.getElementById('detailsPanel').style.display = 'none';
-            updateHiddenFields();
+
+            sendDataToJotform();
         }
 
-        // Update Course Details Panel
-        function updateCourseDetails() {
-            var selectedUniversity = document.getElementById('universityDropdown').value;
-            var selectedCourse = document.getElementById('courseDropdown').value;
-            var detailsPanel = document.getElementById('detailsPanel');
-            if (selectedUniversity && selectedCourse && universities[selectedUniversity][selectedCourse]) {
-                var courseDetails = universities[selectedUniversity][selectedCourse];
-                document.getElementById('fee').textContent = 'Tuition Fee: ' + courseDetails.fee;
-                document.getElementById('campus').textContent = 'Campus: ' + courseDetails.campus;
-                detailsPanel.style.display = 'block';
-            } else {
-                detailsPanel.style.display = 'none';
-            }
-            updateHiddenFields();
+        // 将数据同步到 Jotform
+        function sendDataToJotform() {
+            var university = document.getElementById("universityDropdown").value;
+            var course = document.getElementById("courseDropdown").value;
+
+            // 使用 JotFormCustomWidget.send() 同步数据
+            JotFormCustomWidget.send({
+                hiddenuniversity: university, // 对应 Jotform 中 HiddenUniversity 的 Unique Name
+                hiddencourse: course // 对应 Jotform 中 HiddenCourse 的 Unique Name
+            });
         }
 
-        // Update hidden fields with selected values
-        function updateHiddenFields() {
-            var selectedUniversity = document.getElementById('universityDropdown').value;
-            var selectedCourse = document.getElementById('courseDropdown').value;
-            document.getElementById('hiddenUniversity').value = selectedUniversity;
-            document.getElementById('hiddenCourse').value = selectedCourse;
-        }
-
-        // Initialize dropdowns
-        document.addEventListener('DOMContentLoaded', function () {
+        // 初始化
+        document.addEventListener("DOMContentLoaded", function () {
             updateUniversityDropdown();
-            document.getElementById('universityDropdown').addEventListener('change', updateCourseDropdown);
-            document.getElementById('courseDropdown').addEventListener('change', updateCourseDetails);
+            document.getElementById("universityDropdown").addEventListener("change", updateCourseDropdown);
+            document.getElementById("courseDropdown").addEventListener("change", sendDataToJotform);
         });
     </script>
 </body>
