@@ -23,7 +23,8 @@
             padding: 24px;
             max-width: 400px;
             width: 100%;
-            text-align: center;
+            margin: 0 auto;
+            text-align: center; /* Ensures all content inside is centered */
         }
         label {
             font-weight: 500;
@@ -31,16 +32,16 @@
             display: block;
         }
         select {
-            width: 80%;
+            width: 80%; /* Reduced width for better centering */
             padding: 12px;
             margin-bottom: 16px;
             border: 1px solid #d1d1d6;
             border-radius: 12px;
             background-color: #f5f5f7;
             font-size: 16px;
-            display: block;
             margin-left: auto;
             margin-right: auto;
+            display: block;
         }
         select:focus {
             border-color: #007aff;
@@ -56,10 +57,14 @@
         #detailsPanel p {
             margin: 8px 0;
         }
+        input[type="hidden"] {
+            display: none;
+        }
     </style>
 </head>
 <body>
     <div id="main">
+        <small>Version: 1.0.1</small>
         <label for="universityDropdown">Select University:</label>
         <select id="universityDropdown">
             <option value="">Select a university...</option>
@@ -75,92 +80,101 @@
             <p id="fee"></p>
             <p id="campus"></p>
         </div>
+
+        <!-- Hidden fields to capture selected values -->
+        <input type="hidden" id="hiddenUniversity" name="q_hiddenuniversity">
+        <input type="hidden" id="hiddenCourse" name="q_hiddencourse">
     </div>
 
-    <script>
-        // Example university and course data
-        const universities = {
+    <script type="text/javascript">
+        // Pseudo-data for testing
+        var universities = {
             "University of Western Australia": {
-                "Computer Science": { fee: "$30,000/year", campus: "Crawley, Perth" },
-                "Data Science": { fee: "$32,000/year", campus: "Crawley, Perth" }
+                "Computer Science": { "fee": "$30,000/year", "campus": "Crawley, Perth" },
+                "Data Science": { "fee": "$32,000/year", "campus": "Crawley, Perth" },
+                "Economics": { "fee": "$28,000/year", "campus": "Crawley, Perth" }
             },
             "Curtin University": {
-                "Mechanical Engineering": { fee: "$29,000/year", campus: "Bentley, Perth" },
-                "Business Administration": { fee: "$27,000/year", campus: "Bentley, Perth" }
+                "Mechanical Engineering": { "fee": "$29,000/year", "campus": "Bentley, Perth" },
+                "Civil Engineering": { "fee": "$30,000/year", "campus": "Bentley, Perth" },
+                "Business Administration": { "fee": "$27,000/year", "campus": "Bentley, Perth" }
+            },
+            "Murdoch University": {
+                "Environmental Science": { "fee": "$26,000/year", "campus": "Murdoch, Perth" },
+                "Veterinary Medicine": { "fee": "$35,000/year", "campus": "Murdoch, Perth" },
+                "Psychology": { "fee": "$25,000/year", "campus": "Murdoch, Perth" }
             }
         };
 
-        // Populate university dropdown
+        // Update University Dropdown
         function updateUniversityDropdown() {
-            const universityDropdown = document.getElementById('universityDropdown');
+            var universityDropdown = document.getElementById('universityDropdown');
             universityDropdown.innerHTML = '<option value="">Select a university...</option>';
-            for (const university in universities) {
-                const option = document.createElement('option');
+            Object.keys(universities).forEach(function (university) {
+                var option = document.createElement('option');
                 option.value = university;
-                option.textContent = university;
+                option.text = university;
                 universityDropdown.appendChild(option);
-            }
+            });
         }
 
-        // Populate course dropdown based on selected university
+        // Update Course Dropdown
         function updateCourseDropdown() {
-            const universityDropdown = document.getElementById('universityDropdown');
-            const courseDropdown = document.getElementById('courseDropdown');
-            const selectedUniversity = universityDropdown.value;
-
+            var courseDropdown = document.getElementById('courseDropdown');
+            var selectedUniversity = document.getElementById('universityDropdown').value;
             courseDropdown.innerHTML = '<option value="">Select a course...</option>';
             if (universities[selectedUniversity]) {
-                for (const course in universities[selectedUniversity]) {
-                    const option = document.createElement('option');
+                Object.keys(universities[selectedUniversity]).forEach(function (course) {
+                    var option = document.createElement('option');
                     option.value = course;
-                    option.textContent = course;
+                    option.text = course;
                     courseDropdown.appendChild(option);
-                }
+                });
             }
-
             document.getElementById('detailsPanel').style.display = 'none';
-            sendToJotform();
+            updateHiddenFields();
         }
 
-        // Update details panel based on selected course
-        function updateDetailsPanel() {
-            const universityDropdown = document.getElementById('universityDropdown');
-            const courseDropdown = document.getElementById('courseDropdown');
-            const detailsPanel = document.getElementById('detailsPanel');
-
-            const selectedUniversity = universityDropdown.value;
-            const selectedCourse = courseDropdown.value;
-
+        // Update Course Details Panel
+        function updateCourseDetails() {
+            var selectedUniversity = document.getElementById('universityDropdown').value;
+            var selectedCourse = document.getElementById('courseDropdown').value;
+            var detailsPanel = document.getElementById('detailsPanel');
             if (selectedUniversity && selectedCourse && universities[selectedUniversity][selectedCourse]) {
-                const courseDetails = universities[selectedUniversity][selectedCourse];
-                document.getElementById('fee').textContent = `Tuition Fee: ${courseDetails.fee}`;
-                document.getElementById('campus').textContent = `Campus: ${courseDetails.campus}`;
+                var courseDetails = universities[selectedUniversity][selectedCourse];
+                document.getElementById('fee').textContent = 'Tuition Fee: ' + courseDetails.fee;
+                document.getElementById('campus').textContent = 'Campus: ' + courseDetails.campus;
                 detailsPanel.style.display = 'block';
             } else {
                 detailsPanel.style.display = 'none';
             }
-
-            sendToJotform();
+            updateHiddenFields();
         }
 
-        // Send selected values to Jotform
-        function sendToJotform() {
-            const selectedUniversity = document.getElementById('universityDropdown').value;
-            const selectedCourse = document.getElementById('courseDropdown').value;
+        // Update hidden fields with selected values
+        function updateHiddenFields() {
+            var selectedUniversity = document.getElementById('universityDropdown').value;
+            var selectedCourse = document.getElementById('courseDropdown').value;
 
-            // Use JotFormCustomWidget.send to send data
-            const dataToSend = {
+            console.log("Updating hidden fields", {
                 q_hiddenuniversity: selectedUniversity,
                 q_hiddencourse: selectedCourse
-            };
-            JotFormCustomWidget.send(dataToSend);
+            });
+
+            document.getElementById('hiddenUniversity').value = selectedUniversity;
+            document.getElementById('hiddenCourse').value = selectedCourse;
+
+            JotFormCustomWidget.send({
+                q_hiddenuniversity: selectedUniversity,
+                q_hiddencourse: selectedCourse
+            });
         }
 
         // Initialize dropdowns
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', function () {
             updateUniversityDropdown();
             document.getElementById('universityDropdown').addEventListener('change', updateCourseDropdown);
-            document.getElementById('courseDropdown').addEventListener('change', updateDetailsPanel);
+            document.getElementById('courseDropdown').addEventListener('change', updateCourseDetails);
         });
     </script>
 </body>
