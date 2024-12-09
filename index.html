@@ -63,7 +63,7 @@
 </head>
 <body>
     <div id="main">
-        <small>Version: 1.0.9</small>
+        <small>Version: 1.1.0</small>
         <label for="universityDropdown">Select University:</label>
         <select id="universityDropdown">
             <option value="">Select a university...</option>
@@ -169,6 +169,11 @@
                     q_hiddenuniversity: selectedUniversity,
                     q_hiddencourse: selectedCourse
                 }, '*');
+
+                // Update visible hidden input values to ensure compatibility with JotForm's expectations
+                document.querySelector('[name="q_hiddenuniversity"]').value = selectedUniversity;
+                document.querySelector('[name="q_hiddencourse"]').value = selectedCourse;
+
             } catch (error) {
                 console.error("Error sending message to parent window:", error.message);
             }
