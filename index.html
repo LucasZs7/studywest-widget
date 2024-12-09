@@ -64,7 +64,7 @@
 </head>
 <body>
     <div id="main">
-        <small>Version: 1.0.5</small>
+        <small>Version: 1.0.6</small>
         <label for="universityDropdown">Select University:</label>
         <select id="universityDropdown">
             <option value="">Select a university...</option>
@@ -164,14 +164,18 @@
             document.getElementById('hiddenUniversity').value = selectedUniversity;
             document.getElementById('hiddenCourse').value = selectedCourse;
 
-            if (typeof JotFormCustomWidget !== 'undefined' && typeof JotFormCustomWidget.send === 'function') {
-                console.log("Sending data to Jotform Widget API");
-                JotFormCustomWidget.send({
-                    q_hiddenuniversity: selectedUniversity,
-                    q_hiddencourse: selectedCourse
-                });
-            } else {
-                console.error("JotFormCustomWidget is not defined or send function is missing!");
+            try {
+                if (typeof JotFormCustomWidget !== 'undefined' && typeof JotFormCustomWidget.send === 'function') {
+                    console.log("Sending data to Jotform Widget API");
+                    JotFormCustomWidget.send({
+                        q_hiddenuniversity: selectedUniversity,
+                        q_hiddencourse: selectedCourse
+                    });
+                } else {
+                    throw new Error("JotFormCustomWidget is not defined or send function is missing!");
+                }
+            } catch (error) {
+                console.error(error.message);
             }
         }
 
