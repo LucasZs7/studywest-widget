@@ -63,7 +63,7 @@
 </head>
 <body>
     <div id="main">
-        <small>Version: 1.1.1</small>
+        <small>Version: 1.1.4</small>
         <label for="universityDropdown">Select University:</label>
         <select id="universityDropdown">
             <option value="">Select a university...</option>
@@ -81,9 +81,9 @@
         </div>
 
         <!-- Hidden fields to capture selected values -->
-        <input type="hidden" id="hiddenUniversity" name="q_hiddenuniversity">
-        <input type="hidden" id="hiddenCourse" name="q_hiddencourse">
-        <input type="hidden" id="combine" name="input_787">
+        <input type="hidden" id="hiddenUniversity" name="q771_hiddenuniversity">
+        <input type="hidden" id="hiddenCourse" name="q772_hiddencourse">
+        <input type="hidden" id="combine" name="q787_combine">
     </div>
 
     <script type="text/javascript">
@@ -158,9 +158,9 @@
             var combinedValue = selectedUniversity + ' - ' + selectedCourse;
 
             console.log("Updating hidden fields", {
-                q_hiddenuniversity: selectedUniversity,
-                q_hiddencourse: selectedCourse,
-                input_787: combinedValue
+                q771_hiddenuniversity: selectedUniversity,
+                q772_hiddencourse: selectedCourse,
+                q787_combine: combinedValue
             });
 
             document.getElementById('hiddenUniversity').value = selectedUniversity;
@@ -170,15 +170,15 @@
             try {
                 console.log("Sending data via postMessage");
                 window.parent.postMessage({
-                    q_hiddenuniversity: selectedUniversity,
-                    q_hiddencourse: selectedCourse,
-                    input_787: combinedValue
+                    q771_hiddenuniversity: selectedUniversity,
+                    q772_hiddencourse: selectedCourse,
+                    q787_combine: combinedValue
                 }, '*');
 
                 // Update visible hidden input values to ensure compatibility with JotForm's expectations
-                document.querySelector('[name="q_hiddenuniversity"]').value = selectedUniversity;
-                document.querySelector('[name="q_hiddencourse"]').value = selectedCourse;
-                document.querySelector('[name="input_787"]').value = combinedValue;
+                document.querySelector('[name="q771_hiddenuniversity"]').value = selectedUniversity;
+                document.querySelector('[name="q772_hiddencourse"]').value = selectedCourse;
+                document.querySelector('[name="q787_combine"]').value = combinedValue;
 
             } catch (error) {
                 console.error("Error sending message to parent window:", error.message);
