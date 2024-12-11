@@ -23,7 +23,7 @@
             max-width: 400px;
             width: 100%;
             margin: 0 auto;
-            text-align: center; /* Ensures all content inside is centered */
+            text-align: center;
         }
         label {
             font-weight: 500;
@@ -31,7 +31,7 @@
             display: block;
         }
         select {
-            width: 80%; /* Reduced width for better centering */
+            width: 80%;
             padding: 12px;
             margin-bottom: 16px;
             border: 1px solid #d1d1d6;
@@ -56,14 +56,14 @@
         #detailsPanel p {
             margin: 8px 0;
         }
-        input[type="hidden"] {
+        input[type="hidden"], input[type="text"] {
             display: none;
         }
     </style>
 </head>
 <body>
     <div id="main">
-        <small>Version: 0.1.1</small>
+        <small>Version: 0.1.3</small>
         <label for="universityDropdown">Select University:</label>
         <select id="universityDropdown">
             <option value="">Select a university...</option>
@@ -80,8 +80,10 @@
             <p id="campus"></p>
         </div>
 
-        <!-- Hidden field to capture selected values -->
+        <!-- Hidden fields to capture selected values -->
         <input type="hidden" id="input_793" name="database">
+        <input type="hidden" id="input_771" name="university">
+        <input type="hidden" id="input_772" name="course">
     </div>
 
     <script type="text/javascript">
@@ -130,7 +132,7 @@
                 });
             }
             document.getElementById('detailsPanel').style.display = 'none';
-            updateHiddenField();
+            updateHiddenFields();
         }
 
         // Update Course Details Panel
@@ -146,20 +148,27 @@
             } else {
                 detailsPanel.style.display = 'none';
             }
-            updateHiddenField();
+            updateHiddenFields();
         }
 
-        // Update hidden field with selected values
-        function updateHiddenField() {
+        // Update hidden fields with selected values
+        function updateHiddenFields() {
             var selectedUniversity = document.getElementById('universityDropdown').value;
             var selectedCourse = document.getElementById('courseDropdown').value;
             var combinedValue = selectedUniversity + ' - ' + selectedCourse;
 
-            console.log("Updating hidden field", {
-                input_793: combinedValue
+            console.log("Updating hidden fields", {
+                input_793: combinedValue,
+                input_771: selectedUniversity,
+                input_772: selectedCourse
             });
 
+            // For combined value (方案 1)
             document.getElementById('input_793').value = combinedValue;
+
+            // For separate fields (方案 2)
+            document.getElementById('input_771').value = selectedUniversity;
+            document.getElementById('input_772').value = selectedCourse;
         }
 
         // Initialize dropdowns
